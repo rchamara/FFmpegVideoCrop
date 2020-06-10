@@ -1,12 +1,10 @@
 package com.livewallrcandrapp.ffmpegvideocrop;
 
 import android.content.Context;
-import android.os.Handler;
+
 import android.util.Log;
 
-import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
-import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
-import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
+import nl.bravobit.ffmpeg.FFmpeg;
 
 
 public class FFMpegCrop {
@@ -143,22 +141,6 @@ public class FFMpegCrop {
                 Log.i(TAG," [Crop Starting...] ");
                 mFFmpeg = FFmpeg.getInstance(mContext);
                 try {
-                    mFFmpeg.loadBinary( new LoadBinaryResponseHandler() {
-
-                        @Override
-                        public void onStart() {
-                            Log.i(TAG, "[ try to load library ]");
-                            mOnLoadBinaryListener.onLoadBinaryStart("[load binary start]");
-                        }
-
-                        @Override
-                        public void onFailure() {
-                            Log.e(TAG,"[ Failed load library ]");
-                            mOnLoadBinaryListener.onLoadBinaryFailure("[ load binary fail: ] ");
-                        }
-
-                        @Override
-                        public void onSuccess() {
                             Log.i(TAG, "[ ffmpeg loading success ]");
                             FFmpegCommandExecute mFFmpegCommandExecute = new FFmpegCommandExecute();
                             mFFmpegCommandExecute.setExecuteListener(new onExecuteCommandListener() {
@@ -189,15 +171,7 @@ public class FFMpegCrop {
                             });
                             mFFmpegCommandExecute.executeCommand(mFFmpeg, mContext, cmd);
 
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            Log.i(TAG, "[ Ffmpeg binary load finished ]");
-                            mOnLoadBinaryListener.onLoadBinaryFinish("[ Load binary finished]");
-                        }
-                    });
-                } catch (FFmpegNotSupportedException exc) {
+                } catch (Exception exc) {
                     Log.e(TAG,"[Error :] " +exc.getMessage());
                     mOnLoadBinaryListener.onLoadBinaryFailure("[ Load binary fail: ] "+exc.getMessage());
                 }

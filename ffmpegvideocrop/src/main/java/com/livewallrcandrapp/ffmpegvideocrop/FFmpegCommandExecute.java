@@ -3,9 +3,9 @@ package com.livewallrcandrapp.ffmpegvideocrop;
 import android.content.Context;
 import android.util.Log;
 
-import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
-import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
-import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
+import nl.bravobit.ffmpeg.ExecuteBinaryResponseHandler;
+import nl.bravobit.ffmpeg.FFmpeg;
+
 
 public class FFmpegCommandExecute {
 
@@ -115,7 +115,7 @@ public class FFmpegCommandExecute {
                     mOnExecuteCommandListener.onExecuteFinish();
                 }
             });
-        } catch (FFmpegCommandAlreadyRunningException exe) {
+        } catch (Exception exe) {
             Log.i(TAG, " [ execute exception ] "+exe.getMessage());
             mOnExecuteCommandListener.onExecuteFailure("Exception: "+exe.getMessage());
         }
