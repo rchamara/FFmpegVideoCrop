@@ -81,7 +81,6 @@ public class FFmpegCommandExecute {
             Log.i(TAG, "[ FFmpeg is null ]");
             mFFmpeg = FFmpeg.getInstance(mContext);
         }
-
         try {
             mFFmpeg.execute(cmd, new ExecuteBinaryResponseHandler() {
 

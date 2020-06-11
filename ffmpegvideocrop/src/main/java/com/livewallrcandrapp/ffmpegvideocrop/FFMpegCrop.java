@@ -129,53 +129,60 @@ public class FFMpegCrop {
               "1",
               mOutputVideoUrl
       };
+
+
+
     }
 
     /**
      * create runnable thread for run in background
      */
     private void mCropThread() {
-        mThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(TAG," [Crop Starting...] ");
-                mFFmpeg = FFmpeg.getInstance(mContext);
-                try {
-                            Log.i(TAG, "[ ffmpeg loading success ]");
-                            FFmpegCommandExecute mFFmpegCommandExecute = new FFmpegCommandExecute();
-                            mFFmpegCommandExecute.setExecuteListener(new onExecuteCommandListener() {
-                                @Override
-                                public void onExecuteStart() {
-                                    mOnLoadBinaryListener.onLoadBinaryStart("[Execution start]");
-                                }
+        if (FFmpeg.getInstance(mContext).isSupported()) {
+            mThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i(TAG," [Crop Starting...] ");
+                    mFFmpeg = FFmpeg.getInstance(mContext);
+                    try {
+                        Log.i(TAG, "[ ffmpeg loading success ]");
+                        FFmpegCommandExecute mFFmpegCommandExecute = new FFmpegCommandExecute();
+                        mFFmpegCommandExecute.setExecuteListener(new onExecuteCommandListener() {
+                            @Override
+                            public void onExecuteStart() {
+                                mOnLoadBinaryListener.onLoadBinaryStart("[Execution start]");
+                            }
 
-                                @Override
-                                public void onExecuteProgress(String message) {
-                                    mOnLoadBinaryListener.onLoadBinaryProgress("[ command executing progress]");
-                                }
+                            @Override
+                            public void onExecuteProgress(String message) {
+                                mOnLoadBinaryListener.onLoadBinaryProgress("[ command executing progress]");
+                            }
 
-                                @Override
-                                public void onExecuteFailure(String message) {
-                                    mOnLoadBinaryListener.onLoadBinaryFailure("[command execute fail: ] "+message);
-                                }
+                            @Override
+                            public void onExecuteFailure(String message) {
+                                mOnLoadBinaryListener.onLoadBinaryFailure("[command execute fail: ] "+message);
+                            }
 
-                                @Override
-                                public void onExecuteSuccess(String message) {
-                                    mOnLoadBinaryListener.onLoadBinarySuccess("[ command execute success ] "+message);
-                                }
+                            @Override
+                            public void onExecuteSuccess(String message) {
+                                mOnLoadBinaryListener.onLoadBinarySuccess("[ command execute success ] "+message);
+                            }
 
-                                @Override
-                                public void onExecuteFinish() {
-                                    mOnLoadBinaryListener.onLoadBinaryFinish("[ command execute finished ]");
-                                }
-                            });
-                            mFFmpegCommandExecute.executeCommand(mFFmpeg, mContext, cmd);
+                            @Override
+                            public void onExecuteFinish() {
+                                mOnLoadBinaryListener.onLoadBinaryFinish("[ command execute finished ]");
+                            }
+                        });
+                        mFFmpegCommandExecute.executeCommand(mFFmpeg, mContext, cmd);
 
-                } catch (Exception exc) {
-                    Log.e(TAG,"[Error :] " +exc.getMessage());
-                    mOnLoadBinaryListener.onLoadBinaryFailure("[ Load binary fail: ] "+exc.getMessage());
+                    } catch (Exception exc) {
+                        Log.e(TAG,"[Error :] " +exc.getMessage());
+                        mOnLoadBinaryListener.onLoadBinaryFailure("[ Load binary fail: ] "+exc.getMessage());
+                    }
                 }
-            }
-        });
+            });
+        } else {
+
+        }
     }
 }
