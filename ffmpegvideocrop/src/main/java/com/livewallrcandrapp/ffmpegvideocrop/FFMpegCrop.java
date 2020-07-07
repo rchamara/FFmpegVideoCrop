@@ -125,6 +125,10 @@ public class FFMpegCrop {
               startTime,
               "-to",
               endTime,
+              "-c:v",
+              "vp9",
+              "-c:a",
+              "libvorbis",
               "-async",
               "1",
               mOutputVideoUrl
@@ -155,7 +159,7 @@ public class FFMpegCrop {
 
                             @Override
                             public void onExecuteProgress(String message) {
-                                mOnLoadBinaryListener.onLoadBinaryProgress("[ command executing progress]");
+                                mOnLoadBinaryListener.onLoadBinaryProgress("[ command executing progress]: "+message);
                             }
 
                             @Override
@@ -182,7 +186,8 @@ public class FFMpegCrop {
                 }
             });
         } else {
-
+            Log.e(TAG, "ffmpeg is not supported");
         }
     }
+
 }
