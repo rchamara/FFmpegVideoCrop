@@ -41,6 +41,16 @@ public class FFMpegCrop {
     private Context mContext;
 
     /**
+     * is video trimming need codec or not
+     */
+    private boolean isNeedCodec;
+
+    /**
+     * device sdk version
+     */
+    private Integer mSdkVersion;
+
+    /**
      * time in long
      * @param mStartTimeMilli
      */
@@ -82,6 +92,18 @@ public class FFMpegCrop {
     }
 
     /**
+     * set the device sdk version
+     * @param mSdkVersion
+     */
+    public void setMSdkVersion(Integer mSdkVersion) { this.mSdkVersion = mSdkVersion; }
+
+    /**
+     * set is codec needed
+     * @param isNeedCodec
+     */
+    public void setIsNeedCodec(boolean isNeedCodec) { this.isNeedCodec = isNeedCodec; }
+
+    /**
      * crop the video using ffmpeg
      */
     public void Crop() {
@@ -117,30 +139,56 @@ public class FFMpegCrop {
 
       Log.i(TAG, "[ Input URL: ] "+mInputVideoUrl);
       Log.i(TAG, "[ Output URL: ] "+mOutputVideoUrl);
-      cmd = new String[]{
-              "-y",
-              "-i",
-              mInputVideoUrl,
-              "-ss",
-              startTime,
-              "-to",
-              endTime,
-              "-c:v",
-              "vp9",
-              "-c:a",
-              "libvorbis",
-              "-vf",
-              "crop=640:256:0:400",
-              "-threads",
-              "5",
-              "-preset",
-              "ultrafast",
-              "-strict",
-              "-2",
-              "-async",
-              "1",
-              mOutputVideoUrl
-      };
+      FFMpegCommandBuild ffMpegCommandBuild = new FFMpegCommandBuild();
+      ffMpegCommandBuild.setMSdkVersion(mSdkVersion);
+      ffMpegCommandBuild.setIsCodecNeed(false);
+      cmd = ffMpegCommandBuild.getCommand(startTime, endTime, mInputVideoUrl, mOutputVideoUrl);
+
+//      cmd = new String[]{
+//              "-y",
+//              "-i",
+//              mInputVideoUrl,
+//              "-ss",
+//              startTime,
+//              "-to",
+//              endTime,
+//              "-c:v",
+//              "vp9",
+//              "-c:a",
+//              "libvorbis",
+//              "-vf",
+//              "crop=640:256:0:400",
+//              "-threads",
+//              "5",
+//              "-preset",
+//              "ultrafast",
+//              "-strict",
+//              "-2",
+//              "-async",
+//              "1",
+//              mOutputVideoUrl
+//      };
+
+//        cmd = new String[]{
+//                "-y",
+//                "-i",
+//                mInputVideoUrl,
+//                "-ss",
+//                startTime,
+//                "-to",
+//                endTime,
+//                "-c:v",
+//                "copy",
+//                "-threads",
+//                "5",
+//                "-preset",
+//                "ultrafast",
+//                "-strict",
+//                "-2",
+//                "-async",
+//                "1",
+//                mOutputVideoUrl
+//        };
 
 
 
