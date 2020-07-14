@@ -4,6 +4,8 @@ import android.content.Context;
 
 import android.util.Log;
 
+import java.io.File;
+
 import nl.bravobit.ffmpeg.FFmpeg;
 
 
@@ -142,56 +144,25 @@ public class FFMpegCrop {
       FFMpegCommandBuild ffMpegCommandBuild = new FFMpegCommandBuild();
       ffMpegCommandBuild.setMSdkVersion(mSdkVersion);
       ffMpegCommandBuild.setIsCodecNeed(false);
+      cleanDirectory();
       cmd = ffMpegCommandBuild.getCommand(startTime, endTime, mInputVideoUrl, mOutputVideoUrl);
+    }
 
-//      cmd = new String[]{
-//              "-y",
-//              "-i",
-//              mInputVideoUrl,
-//              "-ss",
-//              startTime,
-//              "-to",
-//              endTime,
-//              "-c:v",
-//              "vp9",
-//              "-c:a",
-//              "libvorbis",
-//              "-vf",
-//              "crop=640:256:0:400",
-//              "-threads",
-//              "5",
-//              "-preset",
-//              "ultrafast",
-//              "-strict",
-//              "-2",
-//              "-async",
-//              "1",
-//              mOutputVideoUrl
-//      };
-
-//        cmd = new String[]{
-//                "-y",
-//                "-i",
-//                mInputVideoUrl,
-//                "-ss",
-//                startTime,
-//                "-to",
-//                endTime,
-//                "-c:v",
-//                "copy",
-//                "-threads",
-//                "5",
-//                "-preset",
-//                "ultrafast",
-//                "-strict",
-//                "-2",
-//                "-async",
-//                "1",
-//                mOutputVideoUrl
-//        };
-
-
-
+    /**
+     * delete the file if same file exist
+     */
+    private void cleanDirectory() {
+        if (mOutputVideoUrl != null) {
+            try {
+                File file = new File(mOutputVideoUrl);
+                if (file.exists())
+                    file.delete();
+            } catch (Exception exc) {
+                Log.e(TAG, "[cleanDirectory] exception error: "+exc.getMessage());
+            }
+        } else {
+            Log.e(TAG, "[cleanDirectory] output url is empty");
+        }
     }
 
     /**
